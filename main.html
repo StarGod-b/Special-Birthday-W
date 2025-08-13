@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Happy Birthday Zelvita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root{
+    --pink-light: #ffcfe3;
+    --pink-medium: #ff9ec7;
+    --pink-dark: #ff6ba9;
+    --pink-darker: #d6336c;
+    --accent: #d6336c;
+    --gold: #ffd166;
+    --card-shadow: rgba(0,0,0,0.25);
+    --glass: rgba(255,255,255,0.6);
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(
+        90deg,
+        var(--pink-light) 0%, var(--pink-light) 12.5%,
+        var(--pink-medium) 12.5%, var(--pink-medium) 25%,
+        var(--pink-light) 25%, var(--pink-light) 37.5%,
+        var(--pink-medium) 37.5%, var(--pink-medium) 50%,
+        var(--pink-light) 50%, var(--pink-light) 62.5%,
+        var(--pink-medium) 62.5%, var(--pink-medium) 75%,
+        var(--pink-light) 75%, var(--pink-light) 87.5%,
+        var(--pink-medium) 87.5%, var(--pink-medium) 100%
+    );
+}
+
+.balloon {
+    position: absolute;
+    z-index: 0;
+    animation: float 12s infinite ease-in-out;
+    opacity: 0.8;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    border-radius: 50%;
+    animation-duration: calc(10s + var(--i) * 2s);
+    animation-delay: calc(var(--i) * -1s);
+}
+.balloon-string {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 50px;
+}
+.balloon-string svg {
+    width: 100%;
+    height: 100%;
+    stroke: rgba(255, 255, 255, 0.8);
+    stroke-width: 1.5;
+    fill: none;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(-30px) translateX(15px) rotate(5deg); }
+    50% { transform: translateY(-60px) translateX(-15px) rotate(-5deg); }
+    75% { transform: translateY(-30px) translateX(10px) rotate(3deg); }
+}
+
+/* 1. Perbaikan Visual pada Overlay Teks (Marquee) */
+.loop-wrap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    overflow: hidden;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+}
+.loop-top { top: 0; }
+.loop-bottom { bottom: 0; }
+.loop {
+    display: inline-block;
+    padding: 0 15px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
+    animation: marquee 30s linear infinite;
+}
+.loop-bottom .loop {
+    animation-direction: reverse;
+}
+@keyframes marquee {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-100%); }
+}
+
+.wrap {
+    width:100%;
+    max-width:1000px;
+    padding:30px;
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-btn {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(214, 51, 108, 0.3);
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 20px;
+    z-index: 20;
+}
+.back-btn {
+    left: 20px;
+    background: linear-gradient(135deg, #d6336c, #b71c52);
+}
+.next-btn {
+    right: 20px;
+    background: linear-gradient(135deg, #ff6ba9, #ff3f6c);
+}
+.nav-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. Warna Card dan Latar Belakang Lebih Cerah */
+.card {
+    background: linear-gradient(145deg, #ffcfdb, #ffb3c2);
+    border-radius:24px;
+    position:relative;
+    overflow:hidden;
+    max-width: 900px;
+    width: 95%;
+    min-height: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    border: 3px solid rgba(248, 175, 175, 0.7);
+    box-shadow: 0 0 30px rgba(214, 51, 108, 0.3), inset 0 0 20px rgba(255,255,255,0.5);
+}
+
+/* 2. Pita Kado Baru */
+.card-bow {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    background-image: url('img/kue asli.png'); /* Pastikan path sesuai */
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(10deg);
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    pointer-events: none;
+    z-index: 15;
+}
+
+.card-main-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
+.center-oval {
+    background: none;
+    border-radius: 50%;
+    padding: 25px;
+    margin: 10px 0;
+    box-shadow: 0 5px 25px rgba(214, 51, 108, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+}
+
+.photo-frame{
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 8px solid rgb(240, 177, 177);
+    background: linear-gradient(135deg, #fff, #f9f9f9);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+.photo-frame:hover {
+    transform: scale(1.05);
+}
+.photo-frame img {
+    width:100%; height:100%; object-fit:cover;
+    display:block;
+}
+/* 1. Posisi dan Kemiringan Mahkota */
+.crown-icon {
+    position: absolute;
+    top: -40px;
+    left: -20px;
+    width: 100px;
+    height: 100px;
+    background-image: url('img/mahkota.png'); /* Pastikan path sesuai */
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-15deg);
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+    z-index: 16; /* Pastikan di atas pita */
+}
+.caption {
+    font-family:'Dancing Script', cursive;
+    font-size:30px;
+    color:var(--accent);
+    text-align:center;
+    text-shadow: 0 3px 10px rgba(214,51,108,0.15);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+.content-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+.card-title {
+    font-family:'Dancing Script', cursive;
+    font-size:42px;
+    color:#b71c52;
+    margin:6px 0;
+    letter-spacing:1px;
+    text-align: center;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.player {
+    margin-top: 15px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    background: rgba(255, 182, 182, 0.9);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(214, 51, 108, 0.1);
+    width: 95%;
+    max-width: 500px;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(255, 4, 4, 0.8);
+}
+.btn {
+    background:linear-gradient(180deg,#ff6b8f,#ff3f6c);
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:50%;
+    cursor:pointer;
+    min-width:40px;
+    height:40px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(214, 51, 108, 0.2);
+}
+.btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(214, 51, 108, 0.3);
+}
+
+.progress-container {
+    flex:1;
+    min-width: 180px;
+    position: relative;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+.progress {
+    width: 100%;
+    height: 8px;
+    background:rgba(0, 0, 0, 0.1);
+    border-radius:6px;
+    overflow:hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.progress:hover {
+    height: 10px;
+}
+.progress > .progress-fill {
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #ff8ab2, #ff507a);
+    position: relative;
+    transition: width 0.1s linear;
+    border-radius: 6px;
+}
+
+.track-info {
+    font-size:12px;
+    color:#444;
+    font-weight: 500;
+    flex-shrink: 0;
+    display: flex;
+    gap: 4px;
+}
+
+.track-title {
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.playlist-toggle {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+.toggle-btn {
+    background: linear-gradient(135deg, #ff8ab2, #ff507a);
+    color: rgb(105, 46, 46); border: none; border-radius: 20px; padding: 6px 15px; font-size: 11px; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px;
+}
+.toggle-btn:hover {
+    transform: translateY(-2px); box-shadow: 0 4px 8px rgba(214, 51, 108, 0.3);
+}
+.playlist {
+    width: 100%; max-height: 0; overflow-y: auto; border-radius: 10px; background: rgb(255, 172, 172); padding: 0; box-shadow: inset 0 0 5px rgba(0,0,0,0.1); transition: all 0.3s ease; margin-top: 5px;
+}
+.playlist.show {
+    max-height: 120px; padding: 6px;
+}
+.playlist-item {
+    padding: 4px 5px; border-radius: 5px; margin: 2px 0; cursor: pointer; transition: all 0.2s; font-size: 10px; display: flex; align-items: center;
+}
+.playlist-item:hover {
+    background: rgba(255,107,143,0.2);
+}
+.playlist-item.active {
+    background: rgba(255,107,143,0.3); font-weight: bold; color: #d6336c;
+}
+.playlist-item i {
+    margin-right: 5px; color: #d6336c; font-size: 10px;
+}
+
+.birthday-cake {
+    position: relative; width: 140px; height: 110px; margin: 10px auto 20px;
+}
+.cake-base, .cake-layer, .cake-icing {
+    position: absolute;
+}
+.cake-base {
+    width: 100%; height: 10px; background: #f8c9d9; bottom: 0; left: 0; border-radius: 50% / 50%; box-shadow: 0 2px 0 #e08da8;
+}
+.cake-layer.bottom {
+    width: 120px; height: 35px; bottom: 5px; left: 10px; background: linear-gradient(to right, #f5a8c2, #f18aac); border-radius: 10px 10px 50% 50% / 50% 50% 10% 10%; box-shadow: inset 0 -5px 5px rgba(0,0,0,0.1); z-index: 1;
+}
+.cake-layer.middle {
+    width: 90px; height: 30px; bottom: 40px; left: 25px; background: linear-gradient(to right, #f18aac, #ee6b96); border-radius: 10px 10px 50% 50% / 50% 50% 10% 10%; box-shadow: inset 0 -5px 5px rgba(0,0,0,0.1); z-index: 2;
+}
+/* 3. Perbaikan Posisi Icing dan Lilin */
+.cake-icing.top {
+    width: 100px; height: 15px; bottom: 65px; /* Sesuaikan nilai bottom */
+    left: 20px; background: #ffb4b4f9; border-radius: 50% / 20%; z-index: 3; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex;
+    justify-content: space-around;
+    align-items: center; padding: 0 10px;
+}
+.candle-wrap {
+    position: relative; display: inline-block; z-index: 4; /* Pastikan di atas icing */
+}
+.candle {
+    width: 4px; height: 18px; background: linear-gradient(to bottom, #ffd166, #ffb700); position: relative; border-radius: 2px; z-index: 5; top: -15px; left: -2px;
+}
+.flame {
+    position: absolute; width: 8px; height: 12px; background: #ff9e00; border-radius: 50% 50% 20% 20%; box-shadow: 0 0 8px #ff9e00, 0 0 15px #ff9e00; animation: flicker 1.5s infinite alternate; z-index: 6; top: -30px; left: -2px;
+}
+@keyframes flicker {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@media (max-width:768px){
+    body {
+        background: linear-gradient(90deg, var(--pink-light) 0%, var(--pink-light) 12.5%, var(--pink-medium) 12.5%, var(--pink-medium) 25%, var(--pink-light) 25%, var(--pink-light) 37.5%, var(--pink-medium) 37.5%, var(--pink-medium) 50%, var(--pink-light) 50%, var(--pink-light) 62.5%, var(--pink-medium) 62.5%, var(--pink-medium) 75%, var(--pink-light) 75%, var(--pink-light) 87.5%, var(--pink-medium) 87.5%, var(--pink-medium) 100%);
+    }
+    .card-main-content {
+        flex-direction: column;
+    }
+    .card { min-height: 650px; }
+    .photo-frame { width: 180px; height: 180px; }
+    .card-title { font-size: 36px; }
+    .caption { font-size: 26px; }
+    .player { max-width: 90%; margin-top: 10px; }
+    .card-bow {
+        width: 100px;
+        height: 100px;
+        top: -10px;
+        right: -10px;
+    }
+    .crown-icon {
+        width: 80px;
+        height: 80px;
+        top: -30px;
+        left: -15px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="balloon" style="--i:0; top: 5%; left: 8%; width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #ff6ba9, #ff3f6c);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:1; top: 12%; left: 18%; width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #ff8ab2, #ff507a);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:2; top: 20%; left: 25%; width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ff9ec7, #ff6ba9);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:3; top: 8%; left: 40%; width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:4; top: 15%; left: 50%; width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ff507a, #d6336c);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:5; top: 22%; left: 60%; width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #ff3f6c, #b71c52);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:6; top: 10%; left: 70%; width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #ff6ba9, #ff3f6c);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:7; top: 18%; left: 80%; width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ff8ab2, #ff507a);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:8; top: 5%; left: 90%; width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #ff9ec7, #ff6ba9);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:9; top: 15%; left: 95%; width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:10; top: 65%; left: 5%; width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:11; top: 72%; left: 15%; width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:12; top: 80%; left: 25%; width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:13; top: 68%; left: 40%; width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:14; top: 75%; left: 50%; width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:15; top: 82%; left: 60%; width: 40px; height: 40px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:16; top: 70%; left: 70%; width: 50px; height: 50px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:17; top: 78%; left: 80%; width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:18; top: 65%; left: 90%; width: 35px; height: 35px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:19; top: 75%; left: 95%; width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+    <div class="balloon" style="--i:20; top: 5%; left: 65%; width: 55px; height: 55px; background: radial-gradient(circle at 30% 30%, #ffcfe3, #ff9ec7);"><div class="balloon-string"><svg viewBox="0 0 10 50"><path d="M 5 0 C -5 15, 15 35, 5 50"/></svg></div></div>
+
+    <div class="loop-wrap loop-top" aria-hidden="true">
+        <div class="loop">Happy Birthday ✨&nbsp;</div>
+        <div class="loop">Happy Birthday ✨&nbsp;</div>
+    </div>
+    <div class="loop-wrap loop-bottom" aria-hidden="true">
+        <div class="loop">Semoga Panjang Umur & Sehat Selalu ✨&nbsp;</div>
+        <div class="loop">Semoga Panjang Umur & Sehat Selalu ✨&nbsp;</div>
+    </div>
+
+    <main class="wrap" role="main">
+        <section class="card" aria-label="Kartu Ucapan">
+            
+            <div class="card-bow" aria-hidden="true"></div>
+
+            <div class="card-main-content">
+                <div class="photo-frame" id="photoFrame">
+                    <img id="cardPhoto" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" alt="Foto Spesial">
+                    <div class="crown-icon" aria-hidden="true"></div>
+                </div>
+                
+                <div class="content-center">
+                    <div class="center-oval">
+                        <div class="card-title">Happy Birthday!</div>
+                        <div class="caption">Zelvita Septya Putri</div>
+
+                        <div class="birthday-cake">
+                            <div class="cake-base"></div>
+                            <div class="cake-layer bottom"></div>
+                            <div class="cake-layer middle"></div>
+                            <div class="cake-icing top">
+                                <div class="candle-wrap"><div class="candle"></div><div class="flame"></div></div>
+                                <div class="candle-wrap"><div class="candle"></div><div class="flame"></div></div>
+                                <div class="candle-wrap"><div class="candle"></div><div class="flame"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player" role="region" aria-label="Music player">
+                <button class="btn" id="prevBtn"><i class="fas fa-step-backward"></i></button>
+                <button class="btn" id="playBtn"><i class="fas fa-play"></i></button>
+                <button class="btn" id="nextBtn"><i class="fas fa-step-forward"></i></button>
+                <div class="progress-container">
+                    <div class="progress" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div class="track-info" id="trackInfo">
+                    <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
+                </div>
+                <span class="track-title" id="currentTrackTitle"></span>
+                <p class="small" style="font-size:11px; opacity:0.8; color:#555; margin-top:5px;text-align:center;width:100%;">Match Your Song🎵 With Your Own Vibes🌟🌝</p>
+                <div class="playlist-toggle">
+                    <button class="toggle-btn" id="togglePlaylist"><i class="fas fa-chevron-down"></i> Show Playlist</button>
+                </div>
+                <div class="playlist" id="playlist">
+                    <div class="playlist-item active" data-index="0"><i class="fas fa-music"></i> Pamungkas - Happy Birthday</div>
+                    <div class="playlist-item" data-index="1"><i class="fas fa-music"></i> 뎁트(Dept) - Strawberry Champagne</div>
+                    <div class="playlist-item" data-index="2"><i class="fas fa-music"></i> Billie Eilish - BIRDS OF A FEATHER</div>
+                    <div class="playlist-item" data-index="3"><i class="fas fa-music"></i> Henry Moodie - drunk text</div>
+                    <div class="playlist-item" data-index="4"><i class="fas fa-music"></i> The Script - The Man Who Can't Be Moved</div>
+                    <div class="playlist-item" data-index="5"><i class="fas fa-music"></i> Maroon 5 - Payphone ft. Wiz Khalifa</div>
+                    <div class="playlist-item" data-index="6"><i class="fas fa-music"></i> Why Don't We - 8 Letters</div>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html">
+            <button class="nav-btn back-btn" style="opacity:0; animation: fadeIn 0.5s ease 3s forwards;">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </a>
+        <a href="dashboard.html">
+            <button class="nav-btn next-btn" style="opacity:0; animation: fadeIn 0.5s ease 3s forwards;">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </a>
+    </main>
+
+    <script>
+        const PLAYLIST = [ { title: "Pamungkas - Happy Birthday", src: "audio/Pamungkas - Happy Birthday To You (Official Lyrics Video).mp3" },
+         { title: "뎁트(Dept) - Strawberry Champagne",src: "audio/뎁트(Dept) - Strawberry Champagne [Lyric Video].mp3" }, 
+          { title: "Billie Eilish - BIRDS OF A FEATHER", src: "audio/Billie Eilish - BIRDS OF A FEATHER (Official Music Video).mp3" }, 
+          { title: "Henry Moodie - drunk text", src: "audio/@HenryMoodie  - drunk text (Lyrics).mp3" }, 
+          { title: "The Script - The Man Who Can't Be Moved", src: "audio/The Script - The Man Who Cant Be Moved.mp3" }, 
+          { title: "Maroon 5 - Payphone ft. Wiz Khalifa", src: "audio/Maroon 5 Ft. Wiz Khalifa - Payphone (Lyrics).mp3" }, 
+          { title: "Why Don't We - 8 Letters", src: "audio/8 Letters - Why Don't We [Official Music Video].mp3" } ];
+        const photo = document.getElementById('cardPhoto');
+        photo.src = "";
+        const prevBtn = document.getElementById('prevBtn');
+        const playBtn = document.getElementById('playBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        const playlistItems = document.querySelectorAll('.playlist-item');
+        const togglePlaylistBtn = document.getElementById('togglePlaylist');
+        const playlistEl = document.getElementById('playlist');
+        const currentTrackTitleEl = document.getElementById('currentTrackTitle');
+        let isPlaying = false,
+        isDragging = false, 
+        currentTrack = 0;
+        const audio = new Audio();
+        audio.preload = 'metadata';
+        function formatTime(seconds) { if (isNaN(seconds)) return '00:00'; const mins = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`; }
+        function loadTrack(index) { playlistItems.forEach((item, i) => { item.classList.toggle('active', i === index); }); currentTrack = index; audio.src = PLAYLIST[currentTrack].src; currentTrackTitleEl.textContent = PLAYLIST[currentTrack].title; audio.load(); const playPromise = audio.play(); if (playPromise !== undefined) { playPromise.then(() => { playBtn.innerHTML = '<i class="fas fa-pause"></i>'; isPlaying = true; }).catch(err => { playBtn.innerHTML = '<i class="fas fa-play"></i>'; isPlaying = false; }); } }
+        function updateTimeDisplay() { currentTimeEl.textContent = formatTime(audio.currentTime); totalTimeEl.textContent = formatTime(audio.duration); if (!isDragging) { const progress = (audio.currentTime / audio.duration) * 100 || 0; progressFill.style.width = `${progress}%`; } }
+        audio.addEventListener('timeupdate', updateTimeDisplay);
+        audio.addEventListener('loadedmetadata', () => { totalTimeEl.textContent = formatTime(audio.duration); updateTimeDisplay(); });
+        audio.addEventListener('ended', () => { loadTrack((currentTrack + 1) % PLAYLIST.length); });
+        function togglePlay() { isPlaying ? audio.pause() : audio.play().catch(err => console.error('Error playing:', err)); isPlaying = !isPlaying; playBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; }
+        playBtn.addEventListener('click', togglePlay);
+        prevBtn.addEventListener('click', () => { loadTrack((currentTrack - 1 + PLAYLIST.length) % PLAYLIST.length); });
+        nextBtn.addEventListener('click', () => { loadTrack((currentTrack + 1) % PLAYLIST.length); });
+        function setProgress(e) { if (!audio.duration) return; const rect = progressBar.getBoundingClientRect(); let pos = (e.clientX - rect.left) / rect.width; pos = Math.max(0, Math.min(1, pos)); audio.currentTime = pos * audio.duration; }
+        progressBar.addEventListener('mousedown', (e) => { isDragging = true; setProgress(e); });
+        document.addEventListener('mousemove', (e) => { if (isDragging) setProgress(e); });
+        document.addEventListener('mouseup', () => { isDragging = false; });
+        playlistItems.forEach(item => { item.addEventListener('click', () => loadTrack(parseInt(item.dataset.index))); });
+        togglePlaylistBtn.addEventListener('click', () => { playlistEl.classList.toggle('show'); togglePlaylistBtn.querySelector('i').className = playlistEl.classList.contains('show') ? 'fas fa-chevron-up' : 'fas fa-chevron-down'; });
+        window.addEventListener('load', () => { loadTrack(0); });
+    </script>
+</body>
+</html>
