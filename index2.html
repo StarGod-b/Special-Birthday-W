@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ultah Zelvitaa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000;
+    }
+
+    /* --- ENHANCED Notification Style --- */
+    .mobile-notification-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      opacity: 0;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-notification-backdrop.show {
+      display: block;
+      opacity: 1;
+    }
+    
+    .mobile-notification {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      background-color: rgba(40, 40, 40, 0.7);
+      color: white;
+      width: calc(100% - 60px);
+      max-width: 300px;
+      padding: 24px;
+      border-radius: 16px;
+      z-index: 1000;
+      text-align: center;
+      font-size: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .mobile-notification.show {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .mobile-notification p {
+      margin: 0;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    #mobile-notification-ok {
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      -webkit-tap-highlight-color: transparent; /* Remove grey tap highlight on mobile */
+    }
+
+    #mobile-notification-ok:hover,
+    #mobile-notification-ok:active {
+      background-color: #0056b3;
+    }
+    /* --- End Notification Style --- */
+
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('img/beach.jpg') no-repeat center center;
+      background-size: cover;
+      filter: blur(1px);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .phone {
+      width: 360px;
+      height: 720px;
+      background: url('img/taehyung3.jpeg') no-repeat center center;
+      background-size: cover;
+      border-radius: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.1);
+      transition: backdrop-filter 0.5s ease, background 0.5s ease;
+      z-index: 2;
+    }
+
+    .overlay.blur {
+      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .lock-screen, .pattern-screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 30px 20px 20px;
+      color: white;
+      transition: opacity 0.5s;
+    }
+
+    .lock-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .lock-icon {
+      margin-bottom: 15px;
+    }
+
+    .lock-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: rgba(255, 255, 255, 0.9);
+    }
+
+    .clock {
+      font-size: 60px;
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .date {
+      font-size: 20px;
+      opacity: 0.9;
+      font-weight: 400;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .notifications {
+      width: 90%;
+      margin-top: 0;
+    }
+
+    .notification-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      padding-left: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .notification-item {
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(20px);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border: 0.5px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .contact-name {
+      font-weight: 600;
+      font-size: 16px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .time {
+      font-size: 13px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+    .message {
+      font-size: 15px;
+      opacity: 0.9;
+      font-weight: 400;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .swipe-up-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .swipe-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 8px;
+      animation: arrowUpLoop 1.5s ease-in-out infinite;
+    }
+
+    .swipe-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: rgba(255, 255, 255, 0.9);
+    }
+
+    .swipe-text {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    @keyframes arrowUpLoop {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(-8px); opacity: 1; }
+    }
+
+    .pattern-screen {
+      opacity: 0;
+      pointer-events: none;
+      flex-direction: column;
+      justify-content: center;
+      background: transparent;
+      transition: transform 0.3s ease, opacity 0.5s;
+    }
+
+    .pattern-screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .pattern-container {
+      margin: 20px 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .pattern-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 300px;
+    }
+
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      width: 300px;
+      height: 300px;
+      place-items: center;
+    }
+
+    .pattern-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pattern-dot::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      position: absolute;
+    }
+
+    .pattern-dot.active {
+      background: transparent;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+      transform: scale(1.2);
+      transition: all 0.2s ease;
+    }
+
+    .pattern-dot.active::after {
+      background: white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      width: 12px;
+      height: 12px;
+    }
+
+    #patternCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+      width: 300px;
+      height: 300px;
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: 500;
+      color: white;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .clue-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .help-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
+    .help-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .clue {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+      display: none;
+    }
+
+    .clue.show {
+      display: block;
+    }
+
+    .cancel {
+      font-size: 14px;
+      margin-top: 15px;
+      opacity: 0.7;
+      font-weight: 400;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .pattern-instruction {
+      margin-top: 10px;
+      font-size: 16px;
+      text-align: center;
+      color: #ff6b6b;
+      font-weight: 500;
+      height: 20px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .success-message {
+      font-size: 18px;
+      color: #4caf50;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    
+  </style>
+</head>
+<body>
+  
+  <div id="mobileNotificationBackdrop" class="mobile-notification-backdrop"></div>
+  <div id="mobileNotification" class="mobile-notification">
+    <p>Untuk pengalaman terbaik, silakan buka melalui laptop atau desktop.</p>
+    <button id="mobile-notification-ok">OK</button>
+  </div>
+
+  <div class="background"></div>
+  
+  <div class="container">
+    <div class="phone">
+      <div class="overlay" id="overlay"></div>
+      
+      <div class="lock-screen" id="lockScreen">
+        <div class="lock-content">
+          <div class="lock-icon"><svg viewBox="0 0 24 24"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6V9a6 6 0 1 0-12 0v2H4v10h16V11h-2zM8 9a4 4 0 1 1 8 0v2H8V9z"/></svg></div>
+          <div class="clock" id="clock">--:--</div>
+          <div class="date" id="date">-</div>
+        </div>
+        
+        <div class="notifications">
+          <div class="notification-title">Pusat Pemberitahuan</div>
+          <div class="notification-item">
+            <img src="img/taehyung.jpg" alt="Taehyung" class="profile-pic">
+            <div class="notification-content">
+              <div class="notification-header"><span class="contact-name">Taehyung🐯🩷</span><span class="time">now</span></div>
+              <div class="message">생일 축하해요, 내 사랑!</div>
+            </div>
+          </div>
+          <div class="notification-item">
+            <img src="img/haechan2.jpeg" alt="Haechan" class="profile-pic">
+            <div class="notification-content">
+              <div class="notification-header"><span class="contact-name">Haechan😼✨</span><span class="time">now</span></div>
+              <div class="message">당신만큼 특별한 하루가 되시길 바랍니다!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swipe-up-hint">
+          <div class="swipe-icon"><svg viewBox="0 0 24 24"><path d="M12 8l6 6H6z"/></svg></div>
+          <div class="swipe-text">Geser ke atas untuk membuka</div>
+        </div>
+      </div> 
+
+      <div class="pattern-screen" id="patternScreen">
+        <div class="info">Gambarkan pola buka kunci</div>
+        <div class="pattern-container">
+          <div class="pattern-wrapper">
+            <div class="pattern-grid" id="patternGrid">
+              <div class="pattern-dot" data-id="1"></div> <div class="pattern-dot" data-id="2"></div> <div class="pattern-dot" data-id="3"></div>
+              <div class="pattern-dot" data-id="4"></div> <div class="pattern-dot" data-id="5"></div> <div class="pattern-dot" data-id="6"></div>
+              <div class="pattern-dot" data-id="7"></div> <div class="pattern-dot" data-id="8"></div> <div class="pattern-dot" data-id="9"></div>
+            </div>
+            <canvas id="patternCanvas"></canvas>
+          </div>
+        </div>
+        <div class="clue-container">
+          <div class="help-button" id="helpButton">Butuh Petunjuk?</div>
+          <div class="clue" id="clueText">Clue: Inisial</div>
+        </div>
+        <div class="pattern-instruction" id="patternError"></div>
+        <div class="cancel">Geser ke bawah untuk membatalkan</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // --- ENHANCED Mobile Notification Logic ---
+  const mobileNotification = document.getElementById('mobileNotification');
+  const mobileNotificationBackdrop = document.getElementById('mobileNotificationBackdrop');
+  const mobileNotificationOkButton = document.getElementById('mobile-notification-ok');
+
+  function showMobileNotification() {
+    mobileNotificationBackdrop.classList.add('show');
+    mobileNotification.classList.add('show');
+  }
+
+  function hideMobileNotification() {
+    mobileNotificationBackdrop.classList.remove('show');
+    mobileNotification.classList.remove('show');
+  }
+  
+  document.body.addEventListener('touchstart', function(e) {
+    const isInteractiveArea = e.target.closest('.phone');
+    if (isInteractiveArea) {
+      e.preventDefault();
+      showMobileNotification();
+    }
+  }, { passive: false });
+
+  mobileNotificationOkButton.addEventListener('click', hideMobileNotification);
+  // --- End of Enhanced Logic ---
+
+
+  function updateDateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').innerText = `${hours}:${minutes}`;
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const dayName = days[now.getDay()];
+    const date = now.getDate();
+    const monthName = months[now.getMonth()];
+    const year = now.getFullYear();
+    document.getElementById('date').innerText = `${dayName}, ${date} ${monthName} ${year}`;
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  const lockScreen = document.getElementById('lockScreen');
+  const patternScreen = document.getElementById('patternScreen');
+  const overlay = document.getElementById('overlay');
+  const patternError = document.getElementById('patternError');
+  const helpButton = document.getElementById('helpButton');
+  const clueText = document.getElementById('clueText');
+
+  let startY = 0;
+  let isSwiping = false;
+  let isDrawing = false;
+  let failedAttempts = 0;
+  let isLocked = false; 
+
+  helpButton.addEventListener('click', toggleClue);
+
+  function toggleClue() {
+    clueText.classList.toggle('show');
+    if (clueText.classList.contains('show')) {
+      helpButton.textContent = "Sembunyikan Petunjuk";
+      helpButton.style.opacity = "0.8";
+    } else {
+      helpButton.textContent = "Butuh Petunjuk?";
+      helpButton.style.opacity = "1";
+    }
+  }
+
+  function showLockScreen() {
+    // Reset pattern lock completely
+    resetPattern();
+    isDrawing = false;
+    isLocked = false;
+    
+    // Transition screens
+    lockScreen.style.display = 'flex';
+    setTimeout(() => lockScreen.classList.add('active'), 10);
+    lockScreen.style.opacity = 1;
+    
+    // Clear pattern canvas
+    const canvas = document.getElementById('patternCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    
+    // Hide pattern screen
+    patternScreen.style.display = 'none';
+    patternScreen.style.opacity = 0;
+    patternScreen.classList.remove('active');
+    
+    // Reset overlay
+    overlay.classList.remove('blur');
+    
+    // Reset clue state
+    clueText.classList.remove('show');
+    helpButton.textContent = "Butuh Petunjuk?";
+    helpButton.style.opacity = "1";
+    helpButton.style.cursor = "pointer";
+    helpButton.disabled = false;
+    failedAttempts = 0;
+  }
+function hideLockScreen() {
+    lockScreen.classList.remove('active');
+    setTimeout(() => lockScreen.style.display = 'none', 300);
+    resetPattern();
+  }
+
+  function showPatternScreen() {
+    // Reset pattern lock first
+    resetPattern();
+    isDrawing = false;
+    isLocked = false;
+    
+    // Transition screens
+    lockScreen.style.opacity = 0;
+    lockScreen.classList.remove('active');
+    overlay.classList.add('blur');
+    
+    // Ensure pattern screen is properly reset
+    patternScreen.style.display = 'flex';
+    patternScreen.style.opacity = 1;
+    patternScreen.classList.add('active');
+    
+    // Clear any error messages
+    patternError.textContent = '';
+    patternError.style.animation = '';
+    
+    // Initialize pattern lock fresh
+    initPatternLock();
+  }
+    
+  function attachSwipeEvents(element, direction, onTrigger) {
+    element.addEventListener('mousedown', e => {
+        if (isDrawing) return;
+        startY = e.touches[0].clientY;
+        isSwiping = true;
+      });
+
+      element.addEventListener('mouseup', e => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        let diffY = e.changedTouches[0].clientY - startY;
+        if ((direction === 'up' && -diffY > 100 && !isDrawing) || 
+            (direction === 'down' && diffY > 100 && !isDrawing)) {
+          onTrigger();
+        } else {
+          element.style.opacity = 1;
+        }
+      });
+
+      element.addEventListener('mousedown', e => {
+        if (isDrawing) return;
+        startY = e.clientY;
+        isSwiping = true;
+      });
+
+      element.addEventListener('mouseup', e => {
+        if (!isSwiping || isDrawing) return;
+        isSwiping = false;
+        let diffY = e.clientY - startY;
+        if ((direction === 'up' && -diffY > 100) || (direction === 'down' && diffY > 100)) {
+          onTrigger();
+        } else {
+          element.style.opacity = 1;
+        }
+      });
+    }
+
+    
+
+    // Improved swipe event handling
+    function handleSwipe(element, direction, callback) {
+      let startY, isSwiping = false;
+      
+      element.addEventListener('mousedown', e => {
+        if (element === patternScreen && isDrawing) {
+          isSwiping = false;
+          return;
+        }
+        startY = e.touches[0].clientY;
+        isSwiping = true;
+        e.preventDefault(); // Prevent scroll conflicts
+      }, {passive: false});
+      
+      element.addEventListener('mousemove', e => {
+        if (!isSwiping) return;
+        const currentY = e.touches[0].clientY;
+        const diffY = currentY - startY;
+        
+        // For swipe down on pattern screen, allow some movement before preventing default
+        if (element === patternScreen && direction === 'down' && diffY > 30) {
+          e.preventDefault();
+        }
+      }, {passive: false});
+      
+      element.addEventListener('mouseleave', e => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const endY = e.changedTouches[0].clientY;
+        const diffY = endY - startY;
+        
+        // More sensitive swipe detection
+        const threshold = 80; // Reduced from 100
+        if ((direction === 'up' && diffY < -threshold) || 
+            (direction === 'down' && diffY > threshold)) {
+          callback();
+        }
+      }, {passive: true});
+      
+      // Mouse events for desktop testing
+      element.addEventListener('mousedown', e => {
+        if (element === patternScreen && isDrawing) return;
+        startY = e.clientY;
+        isSwiping = true;
+      });
+      
+      element.addEventListener('mousemove', e => {
+        if (!isSwiping) return;
+        // Only prevent default if we're actually swiping
+        if (Math.abs(e.clientY - startY) > 10) {
+          e.preventDefault();
+        }
+      });
+      
+      element.addEventListener('mouseup', e => {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const endY = e.clientY;
+        const diffY = endY - startY;
+        
+        const threshold = 80;
+        if ((direction === 'up' && diffY < -threshold) || 
+            (direction === 'down' && diffY > threshold)) {
+          callback();
+        }
+      });
+      
+      element.addEventListener('mouseleave', () => {
+        isSwiping = false;
+      });
+    }
+    
+    handleSwipe(lockScreen, 'up', () => {
+      if (!patternScreen.classList.contains('active')) {
+        showPatternScreen();
+      }
+    });
+    
+    handleSwipe(patternScreen, 'down', () => {
+      if (patternScreen.classList.contains('active')) {
+        showLockScreen();
+      }
+    });
+
+  function initPatternLock() {
+      const dots = document.querySelectorAll('.pattern-dot');
+      const canvas = document.getElementById('patternCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 300;
+      canvas.height = 300;
+
+      // Ganti warna garis menjadi putih dengan glow
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = 8;
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+
+      isDrawing = false;
+      let path = [];
+      const correctPattern = [1, 2, 3, 5, 7, 8, 9];
+      let failedAttempts = 0;
+
+      // Style garis
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = 8;
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+
+      function getDotPosition(dot) {
+        const rect = dot.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width/2 - canvasRect.left,
+          y: rect.top + rect.height/2 - canvasRect.top,
+          id: parseInt(dot.getAttribute('data-id'))
+        };
+      }
+        // Dapatkan semua posisi titik
+      const dotPositions = [];
+      dots.forEach(dot => {
+        dotPositions.push(getDotPosition(dot));
+      });
+
+      // Fungsi mencari titik terdekat
+      function findNearestDot(x, y) {
+        let minDistance = 60; // Increased threshold for better touch sensitivity
+        let nearestDot = null;
+        
+        for (const pos of dotPositions) {
+          if (path.includes(pos.id)) continue; // Skip already selected dots
+          
+          const distance = Math.sqrt(
+            Math.pow(pos.x - x, 2) + 
+            Math.pow(pos.y - y, 2)
+          );
+          
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestDot = pos;
+          }
+        }
+        
+        return nearestDot;
+      }
+    canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            startDrawing({
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+          }, { passive: false });
+
+    canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const touch = e.touches[0];
+            draw({
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+          }, { passive: false });
+          function startDrawing(e) {
+              if (isLocked) return;
+              resetPattern();
+              isDrawing = true;
+              draw(e);
+          }
+    canvas.addEventListener('touchend', endPattern);
+      function startDrawing(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const dot = findNearestDot(x, y);
+        if (dot) {
+          if (!path.includes(dot.id)) {
+            path.push(dot.id);
+            dots[dot.id - 1].classList.add('active');
+            ctx.beginPath();
+            ctx.moveTo(dot.x, dot.y);
+            isDrawing = true;
+          }
+        }
+      }
+      function getTouchedCircle(x, y) {
+  for (let i = 0; i < circles.length; i++) {
+    const circle = circles[i];
+    const dx = x - circle.x;
+    const dy = y - circle.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance <= circle.radius * 1.5) { // lebih sensitif
+      return i + 1;
+    }
+  }
+  return null;
+}
+      function draw(e) {
+        if (!isDrawing) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Tarik garis ke posisi jari
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        
+        // Cek apakah mendekati titik lain dengan threshold lebih besar
+        const dot = findNearestDot(x, y);
+        if (dot && !path.includes(dot.id)) {
+          // Check distance more accurately
+          const distance = Math.sqrt(
+            Math.pow(x - dot.x, 2) + 
+            Math.pow(y - dot.y, 2)
+          );
+          
+          if (distance < 60) { // Further increased threshold for smoother drawing
+            path.push(dot.id);
+            dots[dot.id - 1].classList.add('active');
+            
+            // Lompat ke titik baru
+            ctx.lineTo(dot.x, dot.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(dot.x, dot.y);
+          }
+        }
+      }
+      dots.forEach(dot => {
+        dot.addEventListener('mousedown', startPattern);
+        dot.addEventListener('touchstart', function (e) {
+          e.preventDefault();
+          startPattern.call(this, e);
+        }, { passive: false });
+
+        dot.addEventListener('mouseover', drawPattern);
+        dot.addEventListener('touchmove', handleTouchMove, { passive: false });
+      });
+
+      canvas.addEventListener('mouseup', endPattern);
+      canvas.addEventListener('touchend', endPattern);
+      dots.forEach(dot => {
+        dot.addEventListener('mouseup', endPattern);
+        dot.addEventListener('touchend', endPattern);
+      });
+
+      function startPattern(e) {
+        e.preventDefault();
+        isDrawing = true;
+        const dotId = parseInt(this.getAttribute('data-id'));
+        if (!path.includes(dotId)) {
+          path.push(dotId);
+          this.classList.add('active');
+          const rect = this.getBoundingClientRect();
+          const x = rect.left + rect.width / 2 - canvas.getBoundingClientRect().left;
+          const y = rect.top + rect.height / 2 - canvas.getBoundingClientRect().top;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+        }
+      }
+      function getTouchingDot(x, y) {
+  const threshold = dotRadius * 2.5; // Lebih sensitif dari sebelumnya
+  for (let i = 0; i < dots.length; i++) {
+    const dot = dots[i];
+    const dx = x - dot.x;
+    const dy = y - dot.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance <= threshold && !path.includes(i + 1)) {
+      return i + 1;
+    }
+  }
+  return null;
+}
+
+let lastDrawTime = 0;
+
+function onDrawStart(e) {
+  const now = Date.now();
+  if (now - lastDrawTime < 200) return; // terlalu cepat
+  lastDrawTime = now;
+
+  isDrawing = true;
+  path = [];
+  drawStart(e);
+}
+
+
+      function drawPattern(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const dotId = parseInt(this.getAttribute('data-id'));
+        if (!path.includes(dotId)) {
+          path.push(dotId);
+          this.classList.add('active');
+          const rect = this.getBoundingClientRect();
+          const x = rect.left + rect.width / 2 - canvas.getBoundingClientRect().left;
+          const y = rect.top + rect.height / 2 - canvas.getBoundingClientRect().top;
+          ctx.lineTo(x, y);
+          ctx.stroke();
+        }
+      }
+
+      function handleTouchMove(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+        for (let el of elements) {
+          if (el.classList.contains('pattern-dot')) {
+            const dotId = parseInt(el.getAttribute('data-id'));
+            if (!path.includes(dotId)) {
+              path.push(dotId);
+              el.classList.add('active');
+              const rect = el.getBoundingClientRect();
+              const x = rect.left + rect.width / 2 - canvas.getBoundingClientRect().left;
+              const y = rect.top + rect.height / 2 - canvas.getBoundingClientRect().top;
+              ctx.lineTo(x, y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      let isLocked = false; // untuk mencegah input saat reset
+
+      function endPattern() {
+        if (!isDrawing || isLocked) return;
+        isDrawing = false;
+        isLocked = true;
+
+        const drawnPath = [...path];
+        const originalStroke = ctx.strokeStyle;
+        const originalShadow = ctx.shadowColor;
+
+        // Clear any existing success message
+        const existingMsg = document.querySelector('.success-message');
+        if (existingMsg) existingMsg.remove();
+
+        if (arraysEqual(drawnPath, correctPattern)) {
+          patternError.textContent = '';
+          const successMsg = document.createElement('div');
+          successMsg.className = 'success-message';
+          successMsg.textContent = 'Pola benar!';
+          patternScreen.appendChild(successMsg);
+          
+          // Disable further drawing
+          isLocked = true;
+          setTimeout(() => {
+            window.location.href = 'main.html';
+          }, 1500);
+  } else {
+    failedAttempts++;
+    patternError.textContent = 'Pola salah. Coba lagi!';
+    patternError.style.color = '#ff6b6b';
+    patternError.style.animation = 'shake 0.5s';
+    
+    // Vibrate device if supported
+    if (navigator.vibrate) {
+      navigator.vibrate(200);
+    }
+    
+    ctx.strokeStyle = '#ff6b6b';
+    ctx.shadowColor = 'rgba(255, 107, 107, 0.5)';
+    ctx.stroke();
+    
+    setTimeout(() => {
+      patternError.textContent = '';
+      patternError.style.animation = '';
+    }, 2000);
+
+    if (failedAttempts >= 3) {
+      helpButton.style.background = "rgba(255, 255, 255, 0.2)";
+      helpButton.style.border = "1px solid rgba(255, 255, 255, 0.4)";
+      helpButton.style.color = "#fff";
+    }
+    // Reset setelah 500ms (termasuk reset warna)
+    setTimeout(() => {
+      resetPattern();
+      ctx.strokeStyle = originalStroke;
+      ctx.shadowColor = originalShadow;
+      // Add cooldown period
+      setTimeout(() => {
+        isLocked = false;
+      }, 300);
+    }, 500);
+    function resetPattern() {
+      path = [];
+      isDrawing = false;
+      isLocked = false;
+      const ctx = document.getElementById('patternCanvas').getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath(); // Reset path drawing
+      // Reset all dots
+      document.querySelectorAll('.pattern-dot').forEach(dot => {
+        dot.classList.remove('active');
+      });
+      // Clear any error messages
+      patternError.textContent = '';
+      patternError.style.animation = '';
+      // Reset line style
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+    }
+    setTimeout(() => {
+  resetPattern();
+  isDrawing = false; // <== PENTING: Paksa off
+}, 300); // beri waktu agar reset selesai sebelum pengguna bisa mulai lagi
+
+  }
+}
+      function arraysEqual(a, b) {
+        return a.length === b.length && a.every((v, i) => v === b[i]);
+      }
+      
+      // Inisialisasi awal
+      resetPattern();
+    }
+    function resetPattern() {
+      // Reset all pattern lock state
+      path = [];
+      isDrawing = false;
+      isLocked = false;
+      
+      // Clear canvas
+      const canvas = document.getElementById('patternCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      
+      // Reset dot styles
+      document.querySelectorAll('.pattern-dot').forEach(dot => {
+        dot.classList.remove('active');
+      });
+      
+      // Reset error/success messages
+      patternError.textContent = '';
+      patternError.style.animation = '';
+      const existingMsg = document.querySelector('.success-message');
+      if (existingMsg) existingMsg.remove();
+      
+      // Reset drawing style
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 3;
+      
+      // Reset clue button
+      clueText.classList.remove('show');
+      helpButton.textContent = "Butuh Petunjuk?";
+      helpButton.style.opacity = "1";
+      helpButton.style.cursor = "pointer";
+      helpButton.removeEventListener('click', toggleClue);
+      helpButton.addEventListener('click', toggleClue);
+    };
+    // Inisialisasi pattern lock saat halaman dimuat
+    window.onload = function() {
+      initPatternLock();
+      
+      // Debugging: Cek apakah gambar dimuat
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.onerror = () => {
+          console.error(`Gagal memuat gambar: ${img.src}`);
+          img.style.border = "2px solid red";
+        };
+      });
+    };
+  </script>
+</body>
+</html>

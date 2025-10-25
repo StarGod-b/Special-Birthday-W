@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ultah Zeli</title>
+  <title>Ultah Zelvitaa</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      touch-action: manipulation;
     }
 
     body, html {
@@ -18,17 +17,84 @@
       height: 100%;
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #000; /* Fallback jika gambar gagal dimuat */
+      background: #000;
     }
 
-    .background-container {
+    /* --- ENHANCED Notification Style --- */
+    .mobile-notification-backdrop {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1; /* Nilai valid */
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      opacity: 0;
+      display: none;
+      transition: opacity 0.3s ease;
     }
+
+    .mobile-notification-backdrop.show {
+      display: block;
+      opacity: 1;
+    }
+    
+    .mobile-notification {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      background-color: rgba(40, 40, 40, 0.7);
+      color: white;
+      width: calc(100% - 60px);
+      max-width: 300px;
+      padding: 24px;
+      border-radius: 16px;
+      z-index: 1000;
+      text-align: center;
+      font-size: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .mobile-notification.show {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .mobile-notification p {
+      margin: 0;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    #mobile-notification-ok {
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      -webkit-tap-highlight-color: transparent; /* Remove grey tap highlight on mobile */
+    }
+
+    #mobile-notification-ok:hover,
+    #mobile-notification-ok:active {
+      background-color: #0056b3;
+    }
+    /* --- End Notification Style --- */
+
+
     .background {
       position: fixed;
       top: 0;
@@ -46,8 +112,8 @@
       align-items: center;
       height: 100vh;
       padding: 20px;
-      position: relative; /* Membuat stacking context */
-      z-index: 1; /* Lebih tinggi dari background */
+      position: relative;
+      z-index: 1;
     }
 
     .phone {
@@ -65,14 +131,14 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.1); /* Mengurangi opacity agar gambar terlihat */
+      background: rgba(0, 0, 0, 0.1);
       transition: backdrop-filter 0.5s ease, background 0.5s ease;
       z-index: 2;
     }
 
     .overlay.blur {
       backdrop-filter: blur(5px);
-      background: rgba(0, 0, 0, 0.5); /* Mengurangi opacity saat blur */
+      background: rgba(0, 0, 0, 0.5);
     }
 
     .lock-screen, .pattern-screen {
@@ -97,7 +163,6 @@
       margin-bottom: 15px;
     }
 
-    /* Lock icon di atas jam */
     .lock-icon {
       margin-bottom: 15px;
     }
@@ -123,7 +188,6 @@
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     }
 
-    /* Notifikasi seperti iPhone - lebih dekat dengan tanggal */
     .notifications {
       width: 90%;
       margin-top: 0;
@@ -187,7 +251,6 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* Swipe hint di tengah bawah */
     .swipe-up-hint {
       position: absolute;
       bottom: 40px;
@@ -231,7 +294,6 @@
       50% { transform: translateY(-8px); opacity: 1; }
     }
 
-    /* Perbaikan desain pattern lock */
     .pattern-screen {
       opacity: 0;
       pointer-events: none;
@@ -268,7 +330,7 @@
       gap: 50px;
       width: 300px;
       height: 300px;
-      place-items: center; /* Memastikan titik di tengah sel */
+      place-items: center;
     }
 
     .pattern-dot {
@@ -338,15 +400,13 @@
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: rgba(255, 255, 255, 0.7);
-      padding: 12px 24px; /* Larger touch target */
+      padding: 12px 24px;
       border-radius: 20px;
-      font-size: 16px; /* Slightly larger text */
+      font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
       margin-bottom: 10px;
-      -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
-      user-select: none; /* Prevent text selection */
-      touch-action: manipulation; /* Improve touch responsiveness */
+      user-select: none;
     }
 
     .help-button:hover {
@@ -361,11 +421,11 @@
       padding: 10px 15px;
       border-radius: 10px;
       max-width: 80%;
-      display: none; /* Sembunyikan clue awalnya */
+      display: none;
     }
 
     .clue.show {
-      display: block; /* Tampilkan saat dibutuhkan */
+      display: block;
     }
 
     .cancel {
@@ -404,87 +464,66 @@
   </style>
 </head>
 <body>
+  
+  <div id="mobileNotificationBackdrop" class="mobile-notification-backdrop"></div>
+  <div id="mobileNotification" class="mobile-notification">
+    <p>Silahkan buka melalui laptop atau desktop.</p>
+    <button id="mobile-notification-ok">OK</button>
+  </div>
+
   <div class="background"></div>
   
   <div class="container">
     <div class="phone">
       <div class="overlay" id="overlay"></div>
       
-      <!-- Lock screen -->
       <div class="lock-screen" id="lockScreen">
         <div class="lock-content">
-          <!-- Lock icon di atas jam -->
-          <div class="lock-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6V9a6 6 0 1 0-12 0v2H4v10h16V11h-2zM8 9a4 4 0 1 1 8 0v2H8V9z"/>
-            </svg>
-          </div>
+          <div class="lock-icon"><svg viewBox="0 0 24 24"><path d="M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6-6V9a6 6 0 1 0-12 0v2H4v10h16V11h-2zM8 9a4 4 0 1 1 8 0v2H8V9z"/></svg></div>
           <div class="clock" id="clock">--:--</div>
           <div class="date" id="date">-</div>
         </div>
         
-        <!-- Notifikasi - lebih dekat dengan tanggal -->
         <div class="notifications">
           <div class="notification-title">Pusat Pemberitahuan</div>
-          
           <div class="notification-item">
             <img src="img/taehyung.jpg" alt="Taehyung" class="profile-pic">
             <div class="notification-content">
-              <div class="notification-header">
-                <span class="contact-name">Taehyung🐯🩷</span>
-                <span class="time">now</span>
-              </div>
-              <div class="message">Selamat Ulang Tahun!</div>
+              <div class="notification-header"><span class="contact-name">Taehyung🐯🩷</span><span class="time">now</span></div>
+              <div class="message">생일 축하해요, 내 사랑!</div>
             </div>
           </div>
-          
           <div class="notification-item">
             <img src="img/haechan2.jpeg" alt="Haechan" class="profile-pic">
             <div class="notification-content">
-              <div class="notification-header">
-                <span class="contact-name">Haechan😼✨</span>
-                <span class="time">now</span>
-              </div>
-              <div class="message">Selamat Ulang Tahun!</div>
+              <div class="notification-header"><span class="contact-name">Haechan😼✨</span><span class="time">now</span></div>
+              <div class="message">당신만큼 특별한 하루가 되시길 바랍니다!</div>
             </div>
           </div>
         </div>
 
-        <!-- Swipe hint di tengah bawah -->
         <div class="swipe-up-hint">
-          <div class="swipe-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 8l6 6H6z"/></svg>
-          </div>
+          <div class="swipe-icon"><svg viewBox="0 0 24 24"><path d="M12 8l6 6H6z"/></svg></div>
           <div class="swipe-text">Geser ke atas untuk membuka</div>
         </div>
       </div> 
 
-      <!-- Pattern screen - diperbarui dengan gaya iPhone -->
       <div class="pattern-screen" id="patternScreen">
         <div class="info">Gambarkan pola buka kunci</div>
-        
         <div class="pattern-container">
           <div class="pattern-wrapper">
             <div class="pattern-grid" id="patternGrid">
-              <div class="pattern-dot" data-id="1"></div>
-              <div class="pattern-dot" data-id="2"></div>
-              <div class="pattern-dot" data-id="3"></div>
-              <div class="pattern-dot" data-id="4"></div>
-              <div class="pattern-dot" data-id="5"></div>
-              <div class="pattern-dot" data-id="6"></div>
-              <div class="pattern-dot" data-id="7"></div>
-              <div class="pattern-dot" data-id="8"></div>
-              <div class="pattern-dot" data-id="9"></div>
+              <div class="pattern-dot" data-id="1"></div> <div class="pattern-dot" data-id="2"></div> <div class="pattern-dot" data-id="3"></div>
+              <div class="pattern-dot" data-id="4"></div> <div class="pattern-dot" data-id="5"></div> <div class="pattern-dot" data-id="6"></div>
+              <div class="pattern-dot" data-id="7"></div> <div class="pattern-dot" data-id="8"></div> <div class="pattern-dot" data-id="9"></div>
             </div>
             <canvas id="patternCanvas"></canvas>
           </div>
         </div>
-        
         <div class="clue-container">
           <div class="help-button" id="helpButton">Butuh Petunjuk?</div>
           <div class="clue" id="clueText">Clue: Inisial</div>
         </div>
-        
         <div class="pattern-instruction" id="patternError"></div>
         <div class="cancel">Geser ke bawah untuk membatalkan</div>
       </div>
@@ -492,13 +531,36 @@
   </div>
 
   <script>
-  // Clock and date logic
+  const mobileNotification = document.getElementById('mobileNotification');
+  const mobileNotificationBackdrop = document.getElementById('mobileNotificationBackdrop');
+  const mobileNotificationOkButton = document.getElementById('mobile-notification-ok');
+
+  function showMobileNotification() {
+    mobileNotificationBackdrop.classList.add('show');
+    mobileNotification.classList.add('show');
+  }
+
+  function hideMobileNotification() {
+    mobileNotificationBackdrop.classList.remove('show');
+    mobileNotification.classList.remove('show');
+  }
+  
+  document.body.addEventListener('touchstart', function(e) {
+    const isInteractiveArea = e.target.closest('.phone');
+    if (isInteractiveArea) {
+      e.preventDefault();
+      showMobileNotification();
+    }
+  }, { passive: false });
+
+  mobileNotificationOkButton.addEventListener('click', hideMobileNotification);
+
+
   function updateDateTime() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     document.getElementById('clock').innerText = `${hours}:${minutes}`;
-
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
     const dayName = days[now.getDay()];
@@ -521,14 +583,9 @@
   let isSwiping = false;
   let isDrawing = false;
   let failedAttempts = 0;
-  let isLocked = false; // moved from inside initPatternLock
+  let isLocked = false; 
 
-  // Fungsi untuk toggle clue
   helpButton.addEventListener('click', toggleClue);
-  helpButton.addEventListener('touchend', function(e) {
-    e.preventDefault(); // Prevent default touch behavior
-    toggleClue();
-  });
 
   function toggleClue() {
     clueText.classList.toggle('show');
@@ -542,31 +599,25 @@
   }
 
   function showLockScreen() {
-    // Reset pattern lock completely
     resetPattern();
     isDrawing = false;
     isLocked = false;
     
-    // Transition screens
     lockScreen.style.display = 'flex';
     setTimeout(() => lockScreen.classList.add('active'), 10);
     lockScreen.style.opacity = 1;
     
-    // Clear pattern canvas
     const canvas = document.getElementById('patternCanvas');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     
-    // Hide pattern screen
     patternScreen.style.display = 'none';
     patternScreen.style.opacity = 0;
     patternScreen.classList.remove('active');
     
-    // Reset overlay
     overlay.classList.remove('blur');
     
-    // Reset clue state
     clueText.classList.remove('show');
     helpButton.textContent = "Butuh Petunjuk?";
     helpButton.style.opacity = "1";
@@ -574,45 +625,39 @@
     helpButton.disabled = false;
     failedAttempts = 0;
   }
-
-  function hideLockScreen() {
+function hideLockScreen() {
     lockScreen.classList.remove('active');
     setTimeout(() => lockScreen.style.display = 'none', 300);
     resetPattern();
   }
 
   function showPatternScreen() {
-    // Reset pattern lock first
     resetPattern();
     isDrawing = false;
     isLocked = false;
     
-    // Transition screens
     lockScreen.style.opacity = 0;
     lockScreen.classList.remove('active');
     overlay.classList.add('blur');
     
-    // Ensure pattern screen is properly reset
     patternScreen.style.display = 'flex';
     patternScreen.style.opacity = 1;
     patternScreen.classList.add('active');
     
-    // Clear any error messages
     patternError.textContent = '';
     patternError.style.animation = '';
     
-    // Initialize pattern lock fresh
     initPatternLock();
   }
-
+    
   function attachSwipeEvents(element, direction, onTrigger) {
-    element.addEventListener('touchstart', e => {
+    element.addEventListener('mousedown', e => {
         if (isDrawing) return;
         startY = e.touches[0].clientY;
         isSwiping = true;
       });
 
-      element.addEventListener('touchend', e => {
+      element.addEventListener('mouseup', e => {
         if (!isSwiping) return;
         isSwiping = false;
         let diffY = e.changedTouches[0].clientY - startY;
@@ -643,47 +688,42 @@
     }
 
     
-
-    // Improved swipe event handling
     function handleSwipe(element, direction, callback) {
       let startY, isSwiping = false;
       
-      element.addEventListener('touchstart', e => {
+      element.addEventListener('mousedown', e => {
         if (element === patternScreen && isDrawing) {
           isSwiping = false;
           return;
         }
         startY = e.touches[0].clientY;
         isSwiping = true;
-        e.preventDefault(); // Prevent scroll conflicts
+        e.preventDefault();
       }, {passive: false});
       
-      element.addEventListener('touchmove', e => {
+      element.addEventListener('mousemove', e => {
         if (!isSwiping) return;
         const currentY = e.touches[0].clientY;
         const diffY = currentY - startY;
         
-        // For swipe down on pattern screen, allow some movement before preventing default
         if (element === patternScreen && direction === 'down' && diffY > 30) {
           e.preventDefault();
         }
       }, {passive: false});
       
-      element.addEventListener('touchend', e => {
+      element.addEventListener('mouseleave', e => {
         if (!isSwiping) return;
         isSwiping = false;
         const endY = e.changedTouches[0].clientY;
         const diffY = endY - startY;
         
-        // More sensitive swipe detection
-        const threshold = 80; // Reduced from 100
+        const threshold = 80; 
         if ((direction === 'up' && diffY < -threshold) || 
             (direction === 'down' && diffY > threshold)) {
           callback();
         }
       }, {passive: true});
       
-      // Mouse events for desktop testing
       element.addEventListener('mousedown', e => {
         if (element === patternScreen && isDrawing) return;
         startY = e.clientY;
@@ -692,7 +732,7 @@
       
       element.addEventListener('mousemove', e => {
         if (!isSwiping) return;
-        // Only prevent default if we're actually swiping
+
         if (Math.abs(e.clientY - startY) > 10) {
           e.preventDefault();
         }
@@ -728,14 +768,13 @@
       }
     });
 
-    function initPatternLock() {
+  function initPatternLock() {
       const dots = document.querySelectorAll('.pattern-dot');
       const canvas = document.getElementById('patternCanvas');
       const ctx = canvas.getContext('2d');
       canvas.width = 300;
       canvas.height = 300;
 
-      // Ganti warna garis menjadi putih dengan glow
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
       ctx.shadowBlur = 8;
@@ -747,13 +786,11 @@
       const correctPattern = [1, 2, 3, 5, 7, 8, 9];
       let failedAttempts = 0;
 
-      // Style garis
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
       ctx.shadowBlur = 8;
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
-
 
       function getDotPosition(dot) {
         const rect = dot.getBoundingClientRect();
@@ -764,19 +801,18 @@
           id: parseInt(dot.getAttribute('data-id'))
         };
       }
-        // Dapatkan semua posisi titik
+
       const dotPositions = [];
       dots.forEach(dot => {
         dotPositions.push(getDotPosition(dot));
       });
 
-      // Fungsi mencari titik terdekat
       function findNearestDot(x, y) {
-        let minDistance = 60; // Increased threshold for better touch sensitivity
+        let minDistance = 60; 
         let nearestDot = null;
         
         for (const pos of dotPositions) {
-          if (path.includes(pos.id)) continue; // Skip already selected dots
+          if (path.includes(pos.id)) continue;
           
           const distance = Math.sqrt(
             Math.pow(pos.x - x, 2) + 
@@ -791,35 +827,32 @@
         
         return nearestDot;
       }
+    canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            startDrawing({
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+          }, { passive: false });
 
-          // Event untuk memulai menggambar
-      canvas.addEventListener('mousedown', startDrawing);
-      canvas.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        startDrawing({
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        });
-      }, { passive: false });
-
-      // Event untuk menggerakkan jari/stylus
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        if (!isDrawing) return;
-        const touch = e.touches[0];
-        draw({
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        });
-      }, { passive: false });
-
-      // Event untuk mengakhiri
-      canvas.addEventListener('mouseup', endPattern);
-      canvas.addEventListener('touchend', endPattern);
-
+    canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const touch = e.touches[0];
+            draw({
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+          }, { passive: false });
+          function startDrawing(e) {
+              if (isLocked) return;
+              resetPattern();
+              isDrawing = true;
+              draw(e);
+          }
+    canvas.addEventListener('touchend', endPattern);
       function startDrawing(e) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -843,7 +876,7 @@
     const dy = y - circle.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance <= circle.radius * 1.5) { // lebih sensitif
+    if (distance <= circle.radius * 1.5) {
       return i + 1;
     }
   }
@@ -856,24 +889,21 @@
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        // Tarik garis ke posisi jari
         ctx.lineTo(x, y);
         ctx.stroke();
         
-        // Cek apakah mendekati titik lain dengan threshold lebih besar
         const dot = findNearestDot(x, y);
         if (dot && !path.includes(dot.id)) {
-          // Check distance more accurately
+
           const distance = Math.sqrt(
             Math.pow(x - dot.x, 2) + 
             Math.pow(y - dot.y, 2)
           );
           
-          if (distance < 60) { // Further increased threshold for smoother drawing
+          if (distance < 60) {
             path.push(dot.id);
             dots[dot.id - 1].classList.add('active');
             
-            // Lompat ke titik baru
             ctx.lineTo(dot.x, dot.y);
             ctx.stroke();
             ctx.beginPath();
@@ -914,7 +944,7 @@
         }
       }
       function getTouchingDot(x, y) {
-  const threshold = dotRadius * 2.5; // Lebih sensitif dari sebelumnya
+  const threshold = dotRadius * 2.5; 
   for (let i = 0; i < dots.length; i++) {
     const dot = dots[i];
     const dx = x - dot.x;
@@ -931,7 +961,7 @@ let lastDrawTime = 0;
 
 function onDrawStart(e) {
   const now = Date.now();
-  if (now - lastDrawTime < 200) return; // terlalu cepat
+  if (now - lastDrawTime < 200) return; 
   lastDrawTime = now;
 
   isDrawing = true;
@@ -976,7 +1006,7 @@ function onDrawStart(e) {
         }
       }
 
-      let isLocked = false; // untuk mencegah input saat reset
+      let isLocked = false;
 
       function endPattern() {
         if (!isDrawing || isLocked) return;
@@ -987,7 +1017,6 @@ function onDrawStart(e) {
         const originalStroke = ctx.strokeStyle;
         const originalShadow = ctx.shadowColor;
 
-        // Clear any existing success message
         const existingMsg = document.querySelector('.success-message');
         if (existingMsg) existingMsg.remove();
 
@@ -998,7 +1027,6 @@ function onDrawStart(e) {
           successMsg.textContent = 'Pola benar!';
           patternScreen.appendChild(successMsg);
           
-          // Disable further drawing
           isLocked = true;
           setTimeout(() => {
             window.location.href = 'main.html';
@@ -1009,7 +1037,6 @@ function onDrawStart(e) {
     patternError.style.color = '#ff6b6b';
     patternError.style.animation = 'shake 0.5s';
     
-    // Vibrate device if supported
     if (navigator.vibrate) {
       navigator.vibrate(200);
     }
@@ -1028,12 +1055,12 @@ function onDrawStart(e) {
       helpButton.style.border = "1px solid rgba(255, 255, 255, 0.4)";
       helpButton.style.color = "#fff";
     }
-    // Reset setelah 500ms (termasuk reset warna)
+
     setTimeout(() => {
       resetPattern();
       ctx.strokeStyle = originalStroke;
       ctx.shadowColor = originalShadow;
-      // Add cooldown period
+
       setTimeout(() => {
         isLocked = false;
       }, 300);
@@ -1044,22 +1071,22 @@ function onDrawStart(e) {
       isLocked = false;
       const ctx = document.getElementById('patternCanvas').getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath(); // Reset path drawing
-      // Reset all dots
+      ctx.beginPath();
+
       document.querySelectorAll('.pattern-dot').forEach(dot => {
         dot.classList.remove('active');
       });
-      // Clear any error messages
+
       patternError.textContent = '';
       patternError.style.animation = '';
-      // Reset line style
+
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
     }
     setTimeout(() => {
   resetPattern();
-  isDrawing = false; // <== PENTING: Paksa off
-}, 300); // beri waktu agar reset selesai sebelum pengguna bisa mulai lagi
+  isDrawing = false;
+}, 300); 
 
   }
 }
@@ -1067,38 +1094,33 @@ function onDrawStart(e) {
         return a.length === b.length && a.every((v, i) => v === b[i]);
       }
       
-      // Inisialisasi awal
+
       resetPattern();
     }
     function resetPattern() {
-      // Reset all pattern lock state
+
       path = [];
       isDrawing = false;
       isLocked = false;
-      
-      // Clear canvas
+
       const canvas = document.getElementById('patternCanvas');
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       
-      // Reset dot styles
       document.querySelectorAll('.pattern-dot').forEach(dot => {
         dot.classList.remove('active');
       });
       
-      // Reset error/success messages
       patternError.textContent = '';
       patternError.style.animation = '';
       const existingMsg = document.querySelector('.success-message');
       if (existingMsg) existingMsg.remove();
       
-      // Reset drawing style
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
       ctx.lineWidth = 3;
       
-      // Reset clue button
       clueText.classList.remove('show');
       helpButton.textContent = "Butuh Petunjuk?";
       helpButton.style.opacity = "1";
@@ -1106,11 +1128,9 @@ function onDrawStart(e) {
       helpButton.removeEventListener('click', toggleClue);
       helpButton.addEventListener('click', toggleClue);
     };
-    // Inisialisasi pattern lock saat halaman dimuat
     window.onload = function() {
       initPatternLock();
       
-      // Debugging: Cek apakah gambar dimuat
       const images = document.querySelectorAll('img');
       images.forEach(img => {
         img.onerror = () => {
@@ -1120,5 +1140,5 @@ function onDrawStart(e) {
       });
     };
   </script>
-  </body>
-  </html>
+</body>
+</html>
